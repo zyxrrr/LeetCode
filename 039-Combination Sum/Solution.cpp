@@ -3,41 +3,20 @@ public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int> > res;
         vector<int> tmp;
-        for(int sta = 0; sta <candidates.size(); sta++){
-            for(int i = sta; i < candidates.size(); ){
-                int sum = sumVector(tmp);
-                if(sum == target){
-                    res.push_back(tmp);
-                    tmp.pop_back();
-                    tmp.pop_back();
-                    i++;
-                    //continue;
-                }else if(sum < target){
-                    tmp.push_back(candidates[i]);
-                }else{
-                    if(tmp.size() >= 2){
-                        tmp.pop_back();
-                        tmp.pop_back();
-                        i++;
-                        if(i >= candidates.size()){
-                            i = sta + 1;
-                        }
-                    }else{
-                        break;
-                    }
-                }
-                //tmp.push_back(candidates[i]);
-            }
-        }
-        
+        sort(candidates.begin(), candidates.end());
+        core(candidates, target, res, tmp, 0);
         return res;
     }
     
-    int sumVector(vector<int> &tmp){
-        int sum = 0;
-        for(int i = 0; i < tmp.size(); i++){
-            sum += tmp[i];
+    void core(vector<int>& candidates, int target, vector<vector<int> > &res, vector<int> &tmp, int idx){
+        if(target == 0){
+            res.push_back(tmp);
+            return;
         }
-        return sum;
+        for(int i = idx; i < candidates.size() && target >= candidates[i]; i++){
+            tmp.push_back(candidates[i]);
+            core(candidates, target - candidates[i], res, tmp, i);
+            tmp.pop_back();
+        }
     }
 };
