@@ -10,26 +10,17 @@
 class Solution {
 public:
     int rob(TreeNode* root) {
-        if (root){
-            int cnt1 = root->val + rob_house(root->left, false) + rob_house(root->right, false);
-            int cnt2 = rob_house(root->left, true) + rob_house(root->right, true);
-            return max(cnt1, cnt2);
-        }else{
-            return 0;
-        }        
+        vector<int> res = rob_house(root);
+        return max(res[0], res[1]);
     }
-    int rob_house(TreeNode *root, bool can_rob){
+    vector<int> rob_house(TreeNode *root){
+        vector<int> res(2,0);
         if (root){
-            if (can_rob){
-                int cnt1 = root->val + rob_house(root->left, false) + rob_house(root->right, false);
-                int cnt2 = rob_house(root->left, true) + rob_house(root->right, true);
-                return max(cnt1, cnt2);
-            }else{
-                int cnt2 = rob_house(root->left, true) + rob_house(root->right, true);
-                return cnt2;
-            }
-        }else{
-            return 0;
+            vector<int> left = rob_house(root->left);
+            vector<int> right = rob_house(root->right);
+            res[0] = max(left[0], left[1]) + max(right[0], right[1]);
+            res[1] = root->val + left[0] + right[0];            
         }
+        return res;
     }
 };
